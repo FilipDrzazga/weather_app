@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather_app</title>
+    <link rel="stylesheet" href="./css/style.comp.css">
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <header class="nav">
+        <ul class="nav__lists">
+            <li class="nav__list-my-location"><button class="btn nav__btn-current-position"><i
+                        class="fas fa-map-marker-alt"></i></button></li>
+            <li class="nav__list-search"><button class="btn nav__btn-search"><i
+                        class="fas fa-search-location"></i></button></li>
+            <li class="nav__list-city"><button class="btn nav__btn-cities"><i class="fas fa-list"></i></button></li>
+        </ul>
+    </header>
+    <section class="intro">
+        <svg class="intro__big-cloud" viewBox="0 0 140 80">
+            <defs>
+                <filter id="shadow-cloud">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+                    <feOffset dx="5" dy="7" />
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.2" />
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+            <path style="filter:url(#shadow-cloud)"
+                d="M221.056,1438.565H115.776s-18.647-12.3-10.427-32.148,32.011-16.292,32.011-16.292-.712-17.83,16.886-23.346c15.938-5.161,27.458,8.957,27.458,8.957a23.509,23.509,0,0,1,18.616.472,21.912,21.912,0,0,1,11.632,13.917s17.976,2.457,20.916,20.5S221.056,1438.565,221.056,1438.565Z"
+                transform="translate(-103.256 -1365.645)" />
+        </svg>
+        <svg class="intro__small-cloud" viewBox="0 0 140 80">
+            <path style="filter:url(#shadow-cloud)"
+                d="M221.056,1438.565H115.776s-18.647-12.3-10.427-32.148,32.011-16.292,32.011-16.292-.712-17.83,16.886-23.346c15.938-5.161,27.458,8.957,27.458,8.957a23.509,23.509,0,0,1,18.616.472,21.912,21.912,0,0,1,11.632,13.917s17.976,2.457,20.916,20.5S221.056,1438.565,221.056,1438.565Z"
+                transform="translate(-103.256 -1365.645)" />
+        </svg>
+        <svg class="intro__sun" viewBox="0 0 118 118">
+            <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
+    </section>
+    <section class="main">
+        <h1 class="main__location">London, GB</h1>
+        <button class="main__add-location"><i class="fas fa-plus"></i></button>
+        <p class="main__date">Monday, 23 March</p>
+        <p class="main__location-time">15:32</p>
+        <div class="main__weather-location">
+            <svg class="sunny" viewBox="0 0 118 118">
+                <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
+        </div>
+        <p class="main__weather-description">Partly Cloudy</p>
+        <p class="main__weather-temp">7c</p>
+        <div class="main__swiper-container swiper-container">
+            <div class="main__swiper-wrapper swiper-wrapper">
+                <div class="main__swiper-slide swiper-slide">
+                    <p class="main__title">Wind</p>
+                    <p class="main__value">7km/h</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="city-search">
+        <input class="city-search__input" type="text" placeholder="Search city...">
+        <button class="city-search__btn"><i class="fas fa-search"></i></button>
+    </section>
+    <section class="all-city">
+        <div class="all-city__content" data-city="1">
+            <p class="all-city__name">Gdansk, PL</p>
+            <button class="all-city__remove"><i class="fas fa-minus"></i></button>
+        </div>
+        <div class="all-city__content" data-city="2">
+            <p class="all-city__name">Wloclawek, PL</p>
+            <button class="all-city__remove"><i class="fas fa-minus"></i></button>
+        </div>
+        <div class="all-city__content" data-city="3">
+            <p class="all-city__name">Barcelona, PL</p>
+            <button class="all-city__remove"><i class="fas fa-minus"></i></button>
+        </div>
+        <div class="all-city__content" data-city="4">
+            <p class="all-city__name">Berlin, PL</p>
+            <button class="all-city__remove"><i class="fas fa-minus"></i></button>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+.intro {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: $blue;
+
+    &__big-cloud {
+        position: absolute;
+        top: 50%;
+        left: 40%;
+        transform: translate(-50%, -50%);
+        fill: $white;
+        width: 130px;
+        height: 70px;
+        z-index: 3;
+    }
+
+    &__small-cloud {
+        position: absolute;
+        top: 42%;
+        left: 67%;
+        transform: translate(-50%, -50%);
+        fill: $white;
+        width: 70px;
+        height: 40px;
+        z-index: 2;
+        // display: none;
+    }
+
+    &__sun {
+        position: absolute;
+        top: 45%;
+        left: 52%;
+        transform: translate(-50%, -50%);
+        width: 90px;
+        height: 90px;
+        z-index: 1;
+    }
+}

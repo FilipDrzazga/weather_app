@@ -1,0 +1,6 @@
+@mixin glassmorph ($z-index) {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(3px);
+    z-index: $z-index;
+    -webkit-backdrop-filter: blur(3px);
+}

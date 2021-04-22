@@ -1,0 +1,30 @@
+{
+  "name": "weather_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "compile:sass": "node-sass sass/main.scss css/style.comp.css",
+    "watch:sass": "nodemon -e scss -x \"npm run compile:sass\"",
+    "firefox": "live-server --browser=firefox",
+    "chrome": "live-server --browser=chrome"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FilipDrzazga/weather_app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FilipDrzazga/weather_app/issues"
+  },
+  "homepage": "https://github.com/FilipDrzazga/weather_app#readme",
+  "devDependencies": {
+    "live-server": "^1.2.1",
+    "node-sass": "^5.0.0",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3"
+  }
+}
