@@ -63,12 +63,18 @@ class App {
     };
     // take data from promise and take to the class
     renderData(data) {
-        this.weatherData = data;
+        this.weatherData = {
+            country: data.sys.country,
+            location: data.name,
+            temp: data.main.temp,
+            weatherDescription: data.weather,
+            weatherPlus: [data.main.feels_like, data.main.humidity, data.main.temp_max, data.main.temp_min, data.wind.speed]
+        };
     };
     // create all html on currentWeather() method display all content
     displayWeather() {
         const markup = `
-        <h1 class="main__location">${this.weatherData.name}, ${this.weatherData.sys.country}</h1>
+        <h1 class="main__location">${this.weatherData.location}, ${this.weatherData.country}</h1>
         <button class="main__add-location"><i class="fas fa-plus"></i></button>
         <p class="main__date">Monday, 23 March</p>
         <p class="main__location-time">15:32</p>
@@ -77,7 +83,7 @@ class App {
                 <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
         </div>
         <p class="main__weather-description">${this.weatherData.weather[0].description}</p>
-        <p class="main__weather-temp">${+(this.weatherData.main.temp).toFixed(1)}°C</p>
+        <p class="main__weather-temp">${+(this.weatherData.temp).toFixed(1)}°C</p>
         <div class="main__swiper-container swiper-container">
             <div class="main__swiper-wrapper swiper-wrapper">
                 <div class="main__swiper-slide swiper-slide">
@@ -103,6 +109,10 @@ class App {
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
 
+    };
+    // remove data or HTML???
+    removeData() {
+        
     };
     // render any Error
     renderErr() {
