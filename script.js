@@ -3,8 +3,7 @@
 const introSection = document.querySelector('.intro');
 class App {
     constructor() {
-        this.date = new Date();
-        this.weatherData = '';
+        this.weatherData = {};
         this.userData = {
             latitude: '',
             longitude: '',
@@ -15,13 +14,13 @@ class App {
     };
     // -get geolocation from web api
     userGeolocationAPI() {
-       const userGeoPosition =  new Promise(function (resolve, reject) {
-           return navigator.geolocation.getCurrentPosition(resolve, reject);
+        const userGeoPosition =  new Promise(function (resolve, reject) {
+            return navigator.geolocation.getCurrentPosition(resolve, reject);
        });
-        return userGeoPosition.then(res => {
-            let { latitude, longitude } = res.coords;
-            this.userData.latitude = latitude;
-            this.userData.longitude = longitude;
+       return userGeoPosition.then(res => {
+           let { latitude, longitude } = res.coords;
+           this.userData.latitude = latitude;
+           this.userData.longitude = longitude;
         }).catch(err=>console.log(err.message));
     };
 
@@ -41,8 +40,8 @@ class App {
             };
         };
         return getUserCity()
-            .then(res => res)
-            .catch(err => {console.log(err.message,'Something wrong with getting your location')});
+        .then(res => res)
+        .catch(err => {console.log(err.message,'Something wrong with getting your location')});
     };
     // get data from weather api
     currentWeatherAPI(city) {
@@ -57,18 +56,26 @@ class App {
             };
         };
         return getActyallyWeather()
-            .then(res => this.renderData(res))
-            .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
+        .then(res => this.renderData(res))
+        .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
 
     };
     // take data from promise and take to the class
     renderData(data) {
+        console.log(data);
         this.weatherData = {
+            locationDate: data.dt,
             country: data.sys.country,
             location: data.name,
             temp: data.main.temp,
             weatherDescription: data.weather,
-            weatherPlus: [data.main.feels_like, data.main.humidity, data.main.temp_max, data.main.temp_min, data.wind.speed]
+            weatherPlus: {
+                feelslike: `${ data.main.feels_like}°C`,
+                humidity: `${data.main.humidity}%`,
+                tempMax: `${data.main.temp_max}°C`,
+                tempMin: `${data.main.temp_min}°C`,
+                wind: `${data.wind.speed.toFixed(0)} km/h`
+            }
         };
     };
     // create all html on currentWeather() method display all content
@@ -76,27 +83,43 @@ class App {
         const markup = `
         <h1 class="main__location">${this.weatherData.location}, ${this.weatherData.country}</h1>
         <button class="main__add-location"><i class="fas fa-plus"></i></button>
-        <p class="main__date">Monday, 23 March</p>
+        <p class="main__date">thi</p>
         <p class="main__location-time">15:32</p>
         <div class="main__weather-location">
-            <svg class="sunny" viewBox="0 0 118 118">
-                <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
+        <svg class="sunny" viewBox="0 0 118 118">
+        <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
         </div>
-        <p class="main__weather-description">${this.weatherData.weather[0].description}</p>
+        <p class="main__weather-description">${this.weatherData.weatherDescription[0].main}</p>
         <p class="main__weather-temp">${+(this.weatherData.temp).toFixed(1)}°C</p>
         <div class="main__swiper-container swiper-container">
-            <div class="main__swiper-wrapper swiper-wrapper">
-                <div class="main__swiper-slide swiper-slide">
-                    <p class="main__title">Wind</p>
-                    <p class="main__value">${this.weatherData.wind.speed}km/h</p>
-                </div>
-            </div>
+        <div class="main__swiper-wrapper swiper-wrapper">
+        </div>
         </div>`;
 
         const htmlEl = document.createElement('section');
         htmlEl.innerHTML = markup;
         htmlEl.classList.add('main');
         introSection.insertAdjacentElement('afterend', htmlEl);
+        this.displayWeatherPlus();
+        this.swiperInit();
+    };
+    // display in html weatherplus
+    displayWeatherPlus() {
+        const container = document.querySelector('.main__swiper-wrapper');
+        const { weatherPlus } = this.weatherData;
+        for (const weatherCondition in weatherPlus) {
+            weatherCondition[0].toUpperCase()
+            const markup = `
+            <p class="main__title">${weatherCondition}</p>
+            <p class="main__value">${weatherPlus[weatherCondition]}</p>`;
+
+            const htmlEl = document.createElement('div');
+            htmlEl.classList.add(`main__swiper-slide`);
+            htmlEl.classList.add(`swiper-slide`);
+            htmlEl.innerHTML = markup;
+            container.insertAdjacentElement('afterbegin', htmlEl);
+
+        };
     };
     // search cities by input
     searchCity() {
@@ -112,16 +135,24 @@ class App {
     };
     // remove data or HTML???
     removeData() {
-        
+
     };
     // render any Error
     renderErr() {
 
     };
-
+    // init. swiper lib.
+    swiperInit() {
+        const swiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            centeredSlides: true,
+            freeMode: true,
+            slidesPerView:'auto',
+            spaceBetween: 15,
+            autoplay: {
+                 delay: 5000,
+             },
+        });
+    };
 };
 const app = new App();
-
-
-
-
