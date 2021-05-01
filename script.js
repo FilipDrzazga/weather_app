@@ -62,7 +62,6 @@ class App {
     };
     // take data from promise and take to the class
     renderData(data) {
-        console.log(data);
         this.weatherData = {
             locationDate: data.dt,
             country: data.sys.country,
@@ -83,7 +82,7 @@ class App {
         const markup = `
         <h1 class="main__location">${this.weatherData.location}, ${this.weatherData.country}</h1>
         <button class="main__add-location"><i class="fas fa-plus"></i></button>
-        <p class="main__date">thi</p>
+        <p class="main__date">${this.dateConverter()}</p>
         <p class="main__location-time">15:32</p>
         <div class="main__weather-location">
         <svg class="sunny" viewBox="0 0 118 118">
@@ -140,6 +139,17 @@ class App {
     // render any Error
     renderErr() {
 
+    };
+    // convert date
+    dateConverter() {
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const { locationDate } = this.weatherData;
+        let dayName = new Date(locationDate).getDay();
+        let dayInMonth = new Date(locationDate).getDate();
+        let month = new Date(locationDate).getMonth();
+
+        return `${days[dayName]}, ${dayInMonth} ${months[month]}`;
     };
     // init. swiper lib.
     swiperInit() {
