@@ -2,7 +2,9 @@
 
 const introSection = document.querySelector('.intro');
 class App {
-    constructor() {
+    constructor(input, searchBtn) {
+        this.input = input;
+        this.searchBtn = searchBtn.addEventListener('click', () => this.searchCity());
         this.weatherData = {};
         this.userData = {
             latitude: '',
@@ -56,8 +58,11 @@ class App {
             };
         };
         return getActyallyWeather()
-        .then(res => this.renderData(res))
-        .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
+            .then(res => {
+                this.renderData(res)
+                this.displayWeather()
+            })
+            .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
 
     };
     // take data from promise and take to the class
@@ -69,16 +74,18 @@ class App {
             temp: data.main.temp,
             weatherDescription: data.weather,
             weatherPlus: {
-                feelslike: `${ data.main.feels_like}°C`,
+                feelslike: `${ data.main.feels_like.toFixed(0)}°C`,
                 humidity: `${data.main.humidity}%`,
-                tempMax: `${data.main.temp_max}°C`,
-                tempMin: `${data.main.temp_min}°C`,
+                tempMax: `${data.main.temp_max.toFixed(0)}°C`,
+                tempMin: `${data.main.temp_min.toFixed(0)}°C`,
                 wind: `${data.wind.speed.toFixed(0)} km/h`
             }
         };
     };
     // create all html on currentWeather() method display all content
     displayWeather() {
+        this.removeData('main');
+
         const markup = `
         <h1 class="main__location">${this.weatherData.location}, ${this.weatherData.country}</h1>
         <button class="main__add-location"><i class="fas fa-plus"></i></button>
@@ -107,7 +114,6 @@ class App {
         const container = document.querySelector('.main__swiper-wrapper');
         const { weatherPlus } = this.weatherData;
         for (const weatherCondition in weatherPlus) {
-            weatherCondition[0].toUpperCase()
             const markup = `
             <p class="main__title">${weatherCondition}</p>
             <p class="main__value">${weatherPlus[weatherCondition]}</p>`;
@@ -122,7 +128,7 @@ class App {
     };
     // search cities by input
     searchCity() {
-
+        this.currentWeatherAPI(this.input.value);
     };
     // add cities to list max. 4 cities!
     addCityToList() {
@@ -133,8 +139,8 @@ class App {
 
     };
     // remove data or HTML???
-    removeData() {
-
+    removeData(clearThisInnerHtml) {
+        if (document.querySelector(`.${clearThisInnerHtml}`)) document.querySelector(`.${clearThisInnerHtml}`).remove();
     };
     // render any Error
     renderErr() {
@@ -158,11 +164,15 @@ class App {
             centeredSlides: true,
             freeMode: true,
             slidesPerView:'auto',
-            spaceBetween: 15,
+            spaceBetween: 5,
             autoplay: {
                  delay: 5000,
              },
         });
     };
 };
-const app = new App();
+
+const input = document.querySelector('.city-search__input');
+const searchBtn = document.querySelector('.city-search__btn');
+
+const app = new App(input, searchBtn);
