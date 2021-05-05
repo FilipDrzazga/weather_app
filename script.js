@@ -1,11 +1,11 @@
 'use strict'
 
-const introSection = document.querySelector('.intro');
 class App {
     constructor(input, searchBtn) {
         this.input = input;
-        this.searchBtn = searchBtn.addEventListener('click', () => this.searchCity());
+        this.searchBtn = searchBtn.addEventListener('click',this.searchCity.bind(this));
         this.weatherData = {};
+        this.bestCity = [];
         this.userData = {
             latitude: '',
             longitude: '',
@@ -18,11 +18,11 @@ class App {
     userGeolocationAPI() {
         const userGeoPosition =  new Promise(function (resolve, reject) {
             return navigator.geolocation.getCurrentPosition(resolve, reject);
-       });
-       return userGeoPosition.then(res => {
-           let { latitude, longitude } = res.coords;
-           this.userData.latitude = latitude;
-           this.userData.longitude = longitude;
+        });
+        return userGeoPosition.then(res => {
+            let { latitude, longitude } = res.coords;
+            this.userData.latitude = latitude;
+            this.userData.longitude = longitude;
         }).catch(err=>console.log(err.message));
     };
 
@@ -58,11 +58,12 @@ class App {
             };
         };
         return getActyallyWeather()
-            .then(res => {
-                this.renderData(res)
-                this.displayWeather()
-            })
-            .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
+        .then(res => {
+            this.renderData(res);
+            this.displayWeather();
+            this.checkIfAddBtnExist('.main__add-location');
+        })
+        .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
 
     };
     // take data from promise and take to the class
@@ -132,19 +133,49 @@ class App {
     };
     // add cities to list max. 4 cities!
     addCityToList() {
+        const markup = `
+        <p class="all-city__name">${this.weatherData.location}, ${this.weatherData.country}</p>
+        <button class="all-city__remove"><i class="fas fa-minus"></i></button>`;
 
+        const htmlEl = document.createElement('div');
+        htmlEl.classList.add('all-city__content');
+        htmlEl.innerHTML = markup;
+        allCity.insertAdjacentElement('afterbegin', htmlEl);
+
+        this.bestCity.length>3?alert('kurwa duzo'):this.bestCity.push(this.weatherData.location);
     };
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
 
     };
     // remove data or HTML???
-    removeData(clearThisInnerHtml) {
-        if (document.querySelector(`.${clearThisInnerHtml}`)) document.querySelector(`.${clearThisInnerHtml}`).remove();
+    removeData(clearThisHtml) {
+        if (document.querySelector(`.${clearThisHtml}`)) document.querySelector(`.${clearThisHtml}`).remove();
     };
     // render any Error
     renderErr() {
 
+    };
+    // check if element exist?
+    checkIfAddBtnExist(element) {
+        const check = new Promise(resolve => {
+            if (document.querySelector(element)) {
+                return resolve(document.querySelector(element).addEventListener('click', this.addCityToList.bind(this)));
+            };
+
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(element)) {
+                    resolve(document.querySelector(element).addEventListener('click', this.addCityToList.bind(this)));
+                    observer.disconnect();
+                };
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+            });
+        });
+
+        check.then(response => this.addBtn = response);
     };
     // convert date
     dateConverter() {
@@ -166,13 +197,16 @@ class App {
             slidesPerView:'auto',
             spaceBetween: 5,
             autoplay: {
-                 delay: 5000,
-             },
+                delay: 5000,
+            },
         });
     };
 };
 
 const input = document.querySelector('.city-search__input');
 const searchBtn = document.querySelector('.city-search__btn');
+const introSection = document.querySelector('.intro');
+const allCity = document.querySelector('.all-city');
 
 const app = new App(input, searchBtn);
+
