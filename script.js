@@ -61,7 +61,7 @@ class App {
         .then(res => {
             this.renderData(res);
             this.displayWeather();
-            this.checkIfAddBtnExist('.main__add-location');
+            this.checkIfElementExist('.main__add-location', this.addCityToList.bind(this));
         })
         .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
 
@@ -139,10 +139,21 @@ class App {
 
         const htmlEl = document.createElement('div');
         htmlEl.classList.add('all-city__content');
+        htmlEl.setAttribute('data-city', `${this.weatherData.location}`);
         htmlEl.innerHTML = markup;
         allCity.insertAdjacentElement('afterbegin', htmlEl);
 
-        this.bestCity.length>3?alert('kurwa duzo'):this.bestCity.push(this.weatherData.location);
+        this.bestCity.length > 3 ? alert('kurwa duzo') : this.bestCity.push(htmlEl);
+        this.checkWeatherBestCity();
+    };
+    // go to city from bestCity
+    checkWeatherBestCity() {
+        this.bestCity.forEach(city => {
+            city.addEventListener('click', () => {
+                const getCityName = city.getAttribute('data-city');
+                this.currentWeatherAPI(getCityName);
+            });
+        });
     };
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
@@ -153,19 +164,19 @@ class App {
         if (document.querySelector(`.${clearThisHtml}`)) document.querySelector(`.${clearThisHtml}`).remove();
     };
     // render any Error
-    renderErr() {
+    renderErr(message) {
 
     };
     // check if element exist?
-    checkIfAddBtnExist(element) {
+    checkIfElementExist(element,func) {
         const check = new Promise(resolve => {
             if (document.querySelector(element)) {
-                return resolve(document.querySelector(element).addEventListener('click', this.addCityToList.bind(this)));
+                return resolve(document.querySelector(element).addEventListener('click', func));
             };
 
             const observer = new MutationObserver(mutations => {
                 if (document.querySelector(element)) {
-                    resolve(document.querySelector(element).addEventListener('click', this.addCityToList.bind(this)));
+                    resolve(document.querySelector(element).addEventListener('click', func));
                     observer.disconnect();
                 };
             });
