@@ -145,6 +145,7 @@ class App {
 
         this.bestCity.length > 3 ? alert('kurwa duzo') : this.bestCity.push(htmlEl);
         this.checkWeatherBestCity();
+        this.removeCityFromList();
     };
     // go to city from bestCity
     checkWeatherBestCity() {
@@ -157,7 +158,16 @@ class App {
     };
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
-
+        this.bestCity.forEach((city) => {
+            city.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.className === 'all-city__remove') {
+                    this.bestCity = this.bestCity.filter(item => item !== city);
+                    city.remove();
+                    return this.bestCity
+                };
+            });
+        });
     };
     // remove data or HTML???
     removeData(clearThisHtml) {
