@@ -93,8 +93,8 @@ class App {
         <p class="main__date">${this.dateConverter()}</p>
         <p class="main__location-time">15:32</p>
         <div class="main__weather-location">
-        <svg class="sunny" viewBox="0 0 118 118">
-        <circle cx="59" cy="59" r="59" fill="#f8ab1c" /></svg>
+        <img class="main__weather-location-png" src="http://openweathermap.org/img/wn/${this.weatherData.weatherDescription[0].icon}.png"
+        alt="weather icon"img>
         </div>
         <p class="main__weather-description">${this.weatherData.weatherDescription[0].main}</p>
         <p class="main__weather-temp">${+(this.weatherData.temp).toFixed(1)}°C</p>
