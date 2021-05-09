@@ -3,6 +3,7 @@
     width: 100%;
     height: 100vh;
     background-color: $blue;
+    overflow: hidden;
 
     &__big-cloud {
         position: absolute;
@@ -24,7 +25,6 @@
         width: 80px;
         height: 50px;
         z-index: 2;
-        // display: none;
     }
 
     &__sun {
@@ -32,8 +32,8 @@
         top: 45%;
         left: 52%;
         transform: translate(-50%, -50%);
-        width: 160px;
-        height: 160px;
+        width: 135px;
+        height: 135px;
         z-index: 1;
     }
 }

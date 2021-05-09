@@ -7,7 +7,8 @@
 body {
   position: relative;
   max-width: 420px;
-  height: 100vh; }
+  height: 100vh;
+  overflow: hidden; }
 
 .nav {
   position: absolute;
@@ -15,7 +16,8 @@ body {
   left: 0;
   width: 100%;
   height: 8vh;
-  z-index: 999; }
+  z-index: 999;
+  opacity: 0; }
   .nav__lists {
     width: 100%;
     height: 100%;
@@ -52,7 +54,8 @@ body {
   position: relative;
   width: 100%;
   height: 100vh;
-  background-color: #BADAFC; }
+  background-color: #BADAFC;
+  overflow: hidden; }
   .intro__big-cloud {
     position: absolute;
     top: 48%;
@@ -76,18 +79,21 @@ body {
     top: 45%;
     left: 52%;
     transform: translate(-50%, -50%);
-    width: 160px;
-    height: 160px;
+    width: 135px;
+    height: 135px;
     z-index: 1; }
 
 .main {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
   width: 100%;
   height: 100vh;
-  background-image: radial-gradient(circle, white 0%, #BADAFC 50%); }
+  background-color: #BADAFC; }
   .main__location {
     width: 70%;
     margin: 7% 0 0 0;
@@ -139,7 +145,7 @@ body {
   .main__swiper-container {
     width: 100%;
     height: 20%;
-    margin: 7% 0 0 0; }
+    margin: 10% 0 0 0; }
   .main__swiper-wrapper {
     width: 100%;
     height: 100%; }
@@ -162,6 +168,9 @@ body {
     font-weight: 500; }
 
 .all-city {
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -202,6 +211,9 @@ body {
     color: white; }
 
 .city-search {
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
   height: 100vh;
   display: flex;

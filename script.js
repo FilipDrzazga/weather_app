@@ -1,17 +1,32 @@
 'use strict'
-
 class App {
     constructor(input, searchBtn) {
         this.input = input;
         this.searchBtn = searchBtn.addEventListener('click',this.searchCity.bind(this));
         this.weatherData = {};
         this.bestCity = [];
-        this.userData = {
-            latitude: '',
-            longitude: '',
-            city: '',
-        };
+        this.userData = {latitude: '',longitude: '',city: ''};
+        this.smallCloud = document.querySelector('.intro__small-cloud');
+        this.bigCloud = document.querySelector('.intro__big-cloud');
+        this.sun = document.querySelector('.intro__sun');
+        this.navigation = document.querySelector('.nav');
+        this.introAnimation();
         this.userCurrentCity();
+    };
+    // intro animation
+    introAnimation() {
+        const tl = new TimelineMax();
+        tl.fromTo(this.smallCloud, .2, { scale: 0 }, { scale: 1 })
+        .fromTo(this.bigCloud, .2, { scale: 0 }, { scale: 1 })
+        .fromTo(this.sun, .3, { scale: 0 }, { scale: 1.3 })
+        .to(this.sun, .3, { scale: 1 })
+        .to(this.smallCloud, 1, {left:"73%"},"-=0.5")
+        .to(this.bigCloud, 1, { left: "32%" }, "-=1.5")
+        .to(this.sun, .5, {y: -280 })
+        .to(this.sun, .3, {y: 500,opacity:0 },"-=0.2")
+        .to(this.smallCloud, 1, {left:"120%",opacity:0},"-=0.4")
+        .to(this.bigCloud, 1, { left: "-100%",opacity:0 },"-=1")
+        .set(this.navigation,{opacity:1})
 
     };
     // -get geolocation from web api
@@ -230,4 +245,3 @@ const introSection = document.querySelector('.intro');
 const allCity = document.querySelector('.all-city');
 
 const app = new App(input, searchBtn);
-
