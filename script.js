@@ -150,23 +150,25 @@ class App {
     // search cities by input
     searchCity() {
         this.currentWeatherAPI(this.input.value);
-        this.sectionSearch.style.left = "-100%";
+        this.sectionSearch.classList.toggle('city-search--active');
+        this.sectionSearch.classList.toggle('city-search');
     };
     // add cities to list max. 4 cities!
     addCityToList() {
-        const markup = `
-        <p class="all-city__name">${this.weatherData.location}, ${this.weatherData.country}</p>
-        <button class="all-city__remove"><i class="fas fa-minus"></i></button>`;
+        if (this.bestCity.length <= 3) {
+            const markup = `
+            <p class="all-city__name">${this.weatherData.location}, ${this.weatherData.country}</p>
+            <button class="all-city__remove"><i class="fas fa-minus"></i></button>`;
 
-        const htmlEl = document.createElement('div');
-        htmlEl.classList.add('all-city__content');
-        htmlEl.setAttribute('data-city', `${this.weatherData.location}`);
-        htmlEl.innerHTML = markup;
-        this.sectionAllCity.insertAdjacentElement('afterbegin', htmlEl);
-
-        this.bestCity.length > 3 ? alert('kurwa duzo') : this.bestCity.push(htmlEl);
-        this.checkWeatherBestCity();
-        this.removeCityFromList();
+            const htmlEl = document.createElement('div');
+            htmlEl.classList.add('all-city__content');
+            htmlEl.setAttribute('data-city', `${this.weatherData.location}`);
+            htmlEl.innerHTML = markup;
+            this.sectionAllCity.insertAdjacentElement('afterbegin', htmlEl);
+            this.checkWeatherBestCity();
+            this.removeCityFromList();
+            this.bestCity.push(htmlEl);
+        } else  return
     };
     // go to city from bestCity
     checkWeatherBestCity() {
@@ -175,13 +177,13 @@ class App {
                 if (e.target.classList.contains('all-city__remove')) return
                 const getCityName = city.getAttribute('data-city');
                 this.currentWeatherAPI(getCityName);
-                this.sectionAllCity.style.left = "-100%";
+                this.sectionAllCity.classList.toggle('all-city--active');
+                this.sectionAllCity.classList.toggle('all-city');
             });
         });
     };
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
-        if (this.bestCity.length === 0) this.sectionAllCity.style.left = "-100%";
         this.bestCity.forEach((city) => {
             city.addEventListener('click', (e) => {
                 const target = e.target;
@@ -207,16 +209,20 @@ class App {
         ulList[1].addEventListener('click',  (e) => {
             if (e.target.classList.contains('nav__btn-current-position') || e.target.classList.contains('fa-map-marker-alt')) {
                 this.userCurrentCity();
-                this.sectionSearch.style.left = "-100%";
-                this.sectionAllCity.style.left = "-100%";
+                this.sectionSearch.classList.remove('city-search--active');
+                this.sectionAllCity.classList.remove('all-city--active');
             };
             if (e.target.classList.contains('nav__btn-search') || e.target.classList.contains('fa-search-location')) {
-                this.sectionSearch.style.left = "0%";
-                this.sectionAllCity.style.left = "-100%";
+                this.sectionSearch.classList.toggle('city-search--active');
+                this.sectionSearch.classList.toggle('city-search');
+                this.sectionAllCity.classList.remove('all-city--active');
+                this.sectionAllCity.classList.add('all-city');
             };
             if (e.target.classList.contains('nav__btn-cities') || e.target.classList.contains('fa-list')) {
-                this.sectionAllCity.style.left = "0%";
-                this.sectionSearch.style.left = "-100%";
+                this.sectionAllCity.classList.toggle('all-city--active');
+                this.sectionAllCity.classList.toggle('all-city');
+                this.sectionSearch.classList.remove('city-search--active');
+                this.sectionSearch.classList.add('city-search');
             };
         });
     };
