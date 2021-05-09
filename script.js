@@ -155,7 +155,7 @@ class App {
     };
     // add cities to list max. 4 cities!
     addCityToList() {
-        if (this.bestCity.length <= 3) {
+        if (this.bestCity.length < 4) {
             const markup = `
             <p class="all-city__name">${this.weatherData.location}, ${this.weatherData.country}</p>
             <button class="all-city__remove"><i class="fas fa-minus"></i></button>`;
@@ -166,8 +166,8 @@ class App {
             htmlEl.innerHTML = markup;
             this.sectionAllCity.insertAdjacentElement('afterbegin', htmlEl);
             this.checkWeatherBestCity();
-            this.removeCityFromList();
             this.bestCity.push(htmlEl);
+            this.removeCityFromList();
         } else  return
     };
     // go to city from bestCity
@@ -186,10 +186,9 @@ class App {
     removeCityFromList() {
         this.bestCity.forEach((city) => {
             city.addEventListener('click', (e) => {
-                const target = e.target;
-                if (target.className === 'all-city__remove') {
-                    this.bestCity = this.bestCity.filter(item => item !== city);
+                if (e.target.classList.contains('all-city__remove')) {
                     city.remove();
+                    this.bestCity = this.bestCity.filter(item => item !== city);
                     return this.bestCity
                 };
             });
