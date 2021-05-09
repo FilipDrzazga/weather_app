@@ -3,15 +3,20 @@ class App {
     constructor(input, searchBtn) {
         this.input = input;
         this.searchBtn = searchBtn.addEventListener('click',this.searchCity.bind(this));
-        this.weatherData = {};
-        this.bestCity = [];
-        this.userData = {latitude: '',longitude: '',city: ''};
         this.smallCloud = document.querySelector('.intro__small-cloud');
         this.bigCloud = document.querySelector('.intro__big-cloud');
         this.sun = document.querySelector('.intro__sun');
         this.navigation = document.querySelector('.nav');
+        this.sectionSearch = document.querySelector('.city-search');
+        this.sectionAllCity = document.querySelector('.all-city');
+
+        this.weatherData = {};
+        this.bestCity = [];
+        this.userData = { latitude: '', longitude: '', city: '' };
+
         this.introAnimation();
         this.userCurrentCity();
+        this.initNavBtn();
     };
     // intro animation
     introAnimation() {
@@ -145,6 +150,7 @@ class App {
     // search cities by input
     searchCity() {
         this.currentWeatherAPI(this.input.value);
+        this.sectionSearch.style.left = "-100%";
     };
     // add cities to list max. 4 cities!
     addCityToList() {
@@ -156,7 +162,7 @@ class App {
         htmlEl.classList.add('all-city__content');
         htmlEl.setAttribute('data-city', `${this.weatherData.location}`);
         htmlEl.innerHTML = markup;
-        allCity.insertAdjacentElement('afterbegin', htmlEl);
+        this.sectionAllCity.insertAdjacentElement('afterbegin', htmlEl);
 
         this.bestCity.length > 3 ? alert('kurwa duzo') : this.bestCity.push(htmlEl);
         this.checkWeatherBestCity();
@@ -165,14 +171,17 @@ class App {
     // go to city from bestCity
     checkWeatherBestCity() {
         this.bestCity.forEach(city => {
-            city.addEventListener('click', () => {
+            city.addEventListener('click', (e) => {
+                if (e.target.classList.contains('all-city__remove')) return
                 const getCityName = city.getAttribute('data-city');
                 this.currentWeatherAPI(getCityName);
+                this.sectionAllCity.style.left = "-100%";
             });
         });
     };
     // remove city from the list (remove from all HTML)
     removeCityFromList() {
+        if (this.bestCity.length === 0) this.sectionAllCity.style.left = "-100%";
         this.bestCity.forEach((city) => {
             city.addEventListener('click', (e) => {
                 const target = e.target;
@@ -191,6 +200,25 @@ class App {
     // render any Error
     renderErr(message) {
 
+    };
+    // click for all nav btn
+    initNavBtn() {
+        const ulList = this.navigation.childNodes;
+        ulList[1].addEventListener('click',  (e) => {
+            if (e.target.classList.contains('nav__btn-current-position') || e.target.classList.contains('fa-map-marker-alt')) {
+                this.userCurrentCity();
+                this.sectionSearch.style.left = "-100%";
+                this.sectionAllCity.style.left = "-100%";
+            };
+            if (e.target.classList.contains('nav__btn-search') || e.target.classList.contains('fa-search-location')) {
+                this.sectionSearch.style.left = "0%";
+                this.sectionAllCity.style.left = "-100%";
+            };
+            if (e.target.classList.contains('nav__btn-cities') || e.target.classList.contains('fa-list')) {
+                this.sectionAllCity.style.left = "0%";
+                this.sectionSearch.style.left = "-100%";
+            };
+        });
     };
     // check if element exist?
     checkIfElementExist(element,func) {
@@ -242,6 +270,5 @@ class App {
 const input = document.querySelector('.city-search__input');
 const searchBtn = document.querySelector('.city-search__btn');
 const introSection = document.querySelector('.intro');
-const allCity = document.querySelector('.all-city');
 
 const app = new App(input, searchBtn);
