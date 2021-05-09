@@ -80,18 +80,39 @@ class App {
         return getActyallyWeather()
         .then(res => {
             this.renderData(res);
-            this.displayWeather();
+            this.timeLocationAPI();
             this.checkIfElementExist('.main__add-location', this.addCityToList.bind(this));
         })
         .catch(err=> console.log(err.message, 'Something wrong with getting weather!'));
 
     };
+    // get time from search location
+    timeLocationAPI() {
+        const getTime = async () => {
+            try {
+                const response = await fetch(`http://api.geonames.org/timezoneJSON?lat=${this.weatherData.lat}&lng=${this.weatherData.lon}&username=filipdrzazga`);
+                if (!response.ok) throw new Error('something wrong with getting time from location');
+                const data = await response.json();
+                return data
+            } catch (err) {
+                throw new Error(err.message, 'something wrong with getting time from location');
+            }
+        };
+        return getTime()
+            .then(response => {
+                this.weatherData.time = this.dateConverter(response.time)
+                this.displayWeather();
+                this.checkIfElementExist('.main__add-location', this.addCityToList.bind(this));
+            })
+            .catch(err => console.log(err));
+     };
     // take data from promise and take to the class
     renderData(data) {
         this.weatherData = {
-            locationDate: data.dt,
             country: data.sys.country,
             location: data.name,
+            lat: data.coord.lat,
+            lon: data.coord.lon,
             temp: data.main.temp,
             weatherDescription: data.weather,
             weatherPlus: {
@@ -110,8 +131,8 @@ class App {
         const markup = `
         <h1 class="main__location">${this.weatherData.location}, ${this.weatherData.country}</h1>
         <button class="main__add-location"><i class="fas fa-plus"></i></button>
-        <p class="main__date">${this.dateConverter()}</p>
-        <p class="main__location-time">15:32</p>
+        <p class="main__date">${this.weatherData.time[0]}</p>
+        <p class="main__location-time">${this.weatherData.time[1]}</p>
         <div class="main__weather-location">
         <img class="main__weather-location-png" src="http://openweathermap.org/img/wn/${this.weatherData.weatherDescription[0].icon}.png"
         alt="weather icon"img>
@@ -247,15 +268,16 @@ class App {
         check.then(response => this.addBtn = response);
     };
     // convert date
-    dateConverter() {
+    dateConverter(datatime) {
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        const { locationDate } = this.weatherData;
-        let dayName = new Date(locationDate).getDay();
-        let dayInMonth = new Date(locationDate).getDate();
-        let month = new Date(locationDate).getMonth();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let dayName = new Date(datatime).getDay();
+        let dayInMonth = new Date(datatime).getDate();
+        let month = new Date(datatime).getMonth();
+        let hours = new Date(datatime).getHours();
+        let minutes = new Date(datatime).getMinutes();
 
-        return `${days[dayName]}, ${dayInMonth} ${months[month]}`;
+        return [`${days[dayName]}, ${dayInMonth} ${months[month]}`,`${hours}:${minutes}`];
     };
     // init. swiper lib.
     swiperInit() {
